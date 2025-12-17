@@ -1,16 +1,15 @@
 //
-//  NoteCard.swift
+//  NoteEntityCard.swift
 //  Notes
 //
 //  Created by Paulo Sonzzini Ribeiro de Souza on 17/12/25.
 //
 
-import Foundation
 import SwiftUI
 
-struct NoteCard: View {
+struct NoteEntityCard: View {
 	
-	let note: Note
+	let note: NoteEntity
 	
 	let dateFormatter: DateFormatter = {
 		let formatter = DateFormatter()
@@ -21,20 +20,20 @@ struct NoteCard: View {
 	var body: some View {
 		VStack(alignment: .leading) {
 			HStack(alignment: .top) {
-				Text("Título: \(note.title)")
+				Text("Título: \(note.title ?? "Título da nota")")
 					.font(.title2)
 					.bold()
 				
 				Spacer()
 				
-				Text("Data: \(dateFormatter.string(from: note.date))")
+				Text("Data: \(dateFormatter.string(from: note.date ?? Date.now))")
 					.font(.callout)
 					.foregroundStyle(.secondary)
 			}
 			
 			Divider()
 			
-			Text(note.body)
+			Text(note.body ?? "Corpo da nota")
 				.font(.body)
 				.padding(.top, 5)
 		}
@@ -48,7 +47,6 @@ struct NoteCard: View {
 	}
 }
 
-#Preview {
-	NoteCard(note: Note(title: "Boa noite!", body: "Este é o corpo da nota de boa noite.", date: Date.now))
-}
-
+//#Preview {
+//	NoteEntityCard()
+//}
