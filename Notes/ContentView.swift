@@ -6,71 +6,56 @@
 //
 
 import SwiftUI
-import Combine
-import CoreData
 
 
-struct Note: Identifiable {
-	let id = UUID()
-	let title: String
-	let body: String
-	let date: Date
-}
-
-
-class ContentViewController: ObservableObject {
-	
-	let container: NSPersistentContainer
-	
-	var viewContext: NSManagedObjectContext {
-		return container.viewContext
-	}
-	
-//	let dataController
-	
-	@Published var notes: [Note] = [
-		Note(title: "Boa noite!", body: "Este é o corpo da nota de boa noite.", date: Date.now),
-		Note(title: "Aula de persistência", body: "Veremos CoreData pela primeira vez", date: Date.now),
-		Note(title: "Terceira Nota", body: "Corpo da terceira nota", date: Date.now)
-	]
-
-	
-	// CRUD
-	
-	// Create
-	func addNewNote(note: Note) {
-		self.notes.append(note)
-	}
-	
-	func deleteNote() {
-		
-	}
-	
-	func fetchAllNotes() {
-		
-	}
-	
-	func editNote() {
-		
-	}
-	
-}
-
-
+// View
 struct ContentView: View {
 	
 	@StateObject var controller = ContentViewController()
 	
 	var body: some View {
 		
-		ForEach(controller.notes) { note in
-			Text("\(note.title)")
+		ScrollView {
+			ForEach(controller.notes) { note in
+				NoteCard(note: note)
+			}
 		}
 		
-		Button("Adicionar nota") {
-			let newNote = Note(title: "Nova nota!", body: "Corpo da nova nota", date: Date.now)
-			controller.addNewNote(note: newNote)
+		
+		HStack(spacing: 25) {
+			// Create
+			Button {
+				let newNote = Note(title: "Nova nota!", body: "Corpo da nova nota", date: Date.now)
+				controller.addNewNote(note: newNote)
+			} label: {
+				Image(systemName: "plus")
+			}
+			// Read -> ainda não terá nada...
+			Button {
+				
+			} label: {
+				Image(systemName: "square.and.arrow.down")
+			}
+			// Update
+			Button {
+				controller.editNote()
+			} label: {
+				Image(systemName: "pencil")
+			}
+			// Delete
+			Button {
+				controller.deleteNote()
+			} label: {
+				Image(systemName: "trash")
+			}
 		}
+		.font(.title)
+		.padding()
+		.background(
+			RoundedRectangle(cornerRadius: 999)
+				.foregroundStyle(.secondary.opacity(0.2))
+				.shadow(radius: 2)
+		)
 		
 	}
 }
@@ -78,3 +63,5 @@ struct ContentView: View {
 #Preview {
 	ContentView()
 }
+
+
